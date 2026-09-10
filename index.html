@@ -557,7 +557,7 @@ function render(d){
           ${c.detail.map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('')}
         </div>
         ${isRecommended ? `<div class="persona-note">${recommendReason}</div>` : ''}
-        ${c.isOntu ? `<div class="hint" style="margin-top:10px;">* 연 ${d.ontuRateLow}%~${d.ontuRateHigh}%는 신용점수, 세금 납부 특이사항 없음, 소득 요건 등 심사 기준을 충족하는 경우의 참고 금리이며, 플랫폼 비용은 별도로 발생합니다.</div>` : ''}
+        ${c.isOntu ? `<div class="hint" style="margin-top:10px;">* 연 ${d.ontuRateLow}%~${d.ontuRateHigh}% 수준은 신용점수, 세금 납부 특이사항 없음, 소득 요건 등 심사 기준을 충족하는 경우의 참고 금리이며, 플랫폼 비용은 별도로 발생합니다.</div>` : ''}
         ${c.isOntu && purposeNotes[d.purpose] ? `<div class="persona-note">${purposeNotes[d.purpose]}</div>` : ''}
       </div>
     `;
