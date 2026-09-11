@@ -171,7 +171,7 @@
   <header class="page">
     <span class="badge">온투업 등록업체</span>
     <h1>내 집(담보), 어디까지 대출 가능할까?</h1>
-    <p class="lede">1금융권·2금융권·온투업 기준으로 대략적인 LTV·DSR 한도를 함께 비교해 드립니다. <br>아래 수치는 참고용 추정치이며, 실제 한도는 개별 심사 결과에 따라 달라집니다.</p>
+    <p class="lede">1금융권·2금융권·온투업 기준으로 대략적인 LTV·DSR 한도를 함께 비교해 드립니다. 아래 수치는 참고용 추정치이며, 실제 한도는 개별 심사 결과에 따라 달라집니다.</p>
   </header>
 
   <div class="grid">
@@ -213,21 +213,32 @@
       </div>
 
       <div class="field">
-        <label for="existingDebt">기존 대출 연간 원리금 상환액</label>
+        <label for="existingDebt">기존 대출 연간 이자 납입액</label>
         <div class="row">
           <input type="number" id="existingDebt" placeholder="예: 0" value="0">
           <span class="unit">만원/년</span>
         </div>
-        <div class="hint">신용대출·카드론·기존 주담대 등 상환 중인 모든 대출 포함</div>
+        <div class="hint">신용대출·마이너스통장·전세대출 등 현재 매달 내고 있는 이자의 1년 치 합계를 입력하세요. (원금 상환액은 제외하고 계산이 간소화되어 있습니다)</div>
       </div>
 
       <div class="field">
-        <label for="existingLien">기존 담보대출 잔액 (선순위 채권)</label>
+        <label for="purpose">자금 용도</label>
+        <select id="purpose">
+          <option value="biz">사업자금(아파트담보대출)</option>
+          <option value="jeonse">보증금반환</option>
+          <option value="junior">후순위담보대출</option>
+          <option value="villa">빌라·다세대담보대출</option>
+          <option value="gap">매매잔금</option>
+        </select>
+      </div>
+
+      <div class="field" id="lienField" style="display:none;">
+        <label for="existingLien">선순위 담보대출 잔액</label>
         <div class="row">
           <input type="number" id="existingLien" placeholder="예: 0" value="0">
           <span class="unit">만원</span>
         </div>
-        <div class="hint">후순위담보대출을 알아보시는 경우 입력하세요</div>
+        <div class="hint">이미 설정되어 있는 1순위 담보대출의 잔액을 입력하세요.</div>
       </div>
 
       <div class="field">
@@ -236,18 +247,6 @@
           <input type="number" id="needed" placeholder="예: 30000" value="30000">
           <span class="unit">만원</span>
         </div>
-      </div>
-
-      <div class="field">
-        <label for="purpose">자금 용도</label>
-        <select id="purpose">
-          <option value="biz">사업자금</option>
-          <option value="jeonse">전세보증금 반환</option>
-          <option value="junior">후순위(추가) 자금</option>
-          <option value="villa">빌라·다세대 담보</option>
-          <option value="gap">매매잔금 (전세 세팅 후 상환 예정)</option>
-          <option value="move">이사·기존주택 정리 전 브릿지</option>
-        </select>
       </div>
 
     </div>
@@ -305,7 +304,7 @@
         <b style="font-weight:400;line-height:1.6;">1금융권 은행, 저축은행 모두 취급하지만 은행권은 심사 기간이 길고 한도 산정이 보수적인 경우가 많습니다. 저축은행 중 일부는 개인사업자 전용 담보대출 상품을 별도로 운영합니다.</b>
       </div>
       <div>
-        <span>전세보증금 반환 자금</span>
+        <span>보증금반환 자금</span>
         <b style="font-weight:400;line-height:1.6;">은행권 임대인 대상 반환자금 대출 상품이 있으나 기존 대출·소유 주택 수 등 요건 제한이 있습니다. 타이밍이 급한 경우 2금융권·온투업의 단기 브릿지 상품이 대안으로 검토됩니다.</b>
       </div>
     </div>
@@ -314,8 +313,9 @@
   <div class="disclaimer">
     <strong>이용 안내</strong><br>
     본 계산기는 2026년 9월 기준 공개된 정부 대출 규제(스트레스 DSR 3단계, LTV·지역별 한도 등)를 바탕으로 한 <strong>대략적인 참고용 추정치</strong>이며, 실제 대출 가능 여부·한도·금리는 금융기관별 심사 기준, 신용상태, 담보 평가 결과에 따라 달라질 수 있습니다. 본 계산 결과는 대출 승인을 보장하지 않습니다.<br><br>
+    계산 편의를 위해 기존 대출의 상환 부담은 <strong>연간 이자 납입액</strong> 기준으로만 반영했습니다. 실제 금융기관의 DSR 산정 방식은 대출 종류(분할상환·만기일시상환 등)에 따라 원금까지 포함되거나 별도 환산 기준이 적용될 수 있어, 실제 한도와 차이가 있을 수 있습니다.<br><br>
     상환 능력을 초과하는 대출은 개인신용평점 하락의 원인이 될 수 있으며, 채무를 상환하지 못할 경우 담보로 제공한 부동산이 처분될 수 있습니다. 대출 실행 전 계약 조건을 반드시 확인하시기 바랍니다.<br><br>
-    에이스펀딩은 온라인투자연계금융업법에 따라 등록된 온투업체입니다. (등록번호: <span class="placeholder-flag">[2022-54]</span> · 등록 금융위원회)
+    에이스펀딩은 온라인투자연계금융업법에 따라 등록된 온투업체입니다. (등록번호: 제2022-54호 · 등록 금융위원회)
   </div>
 
   <div class="cta">
@@ -352,6 +352,13 @@ document.querySelectorAll('#firstHomeGroup button').forEach(btn=>{
   $(id).addEventListener('change', calculate);
 });
 
+function updateLienVisibility(){
+  const show = $('purpose').value === 'junior';
+  $('lienField').style.display = show ? 'block' : 'none';
+}
+$('purpose').addEventListener('change', updateLienVisibility);
+updateLienVisibility();
+
 function formatManwon(v){
   v = Math.round(v);
   if (v < 0) v = 0;
@@ -383,9 +390,9 @@ function calculate(){
   const collateral = parseFloat($('collateral').value) || 0;
   const income = parseFloat($('income').value) || 0;
   const existingDebt = parseFloat($('existingDebt').value) || 0;
-  const existingLien = parseFloat($('existingLien').value) || 0;
-  const needed = parseFloat($('needed').value) || 0;
   const purpose = $('purpose').value;
+  const existingLien = (purpose === 'junior') ? (parseFloat($('existingLien').value) || 0) : 0;
+  const needed = parseFloat($('needed').value) || 0;
   const region = state.region;
   const firstHome = state.firstHome === 'yes';
 
@@ -434,8 +441,28 @@ function calculate(){
   const capFinal = Math.max(Math.min(capLTVAmount, capDSRAmount) - existingLien, 0);
 
   // ---------- 온투업(P2P 부동산담보) · 에이스펀딩 (담보가치 중심, 법정 DSR 미적용) ----------
-  const ontuLTVRate = 0.65; // 아파트 시세의 최대 65% 수준까지 검토 가능(규제·비규제 및 개별 심사에 따라 상이)
-  const ontuAmount = Math.max(collateral * ontuLTVRate - existingLien, 0);
+  // 2026.4.2부터 온투업의 '가계 목적' 주택담보대출에도 은행과 동일한 LTV 규제(규제지역 40%/비규제 70%)와
+  // 주택가격별 한도(2~6억원)가 적용됩니다. 다만 사업자금(개인사업자·법인) 목적 대출은 이 가계대출 규제의
+  // 적용 대상이 아니어서, 온투업 자체 기준(최대 65% 수준)으로 검토됩니다.
+  let ontuLTVRate, ontuLTVCap, ontuBasis;
+  if (purpose === 'biz'){
+    ontuLTVRate = 0.65;
+    ontuLTVCap = Infinity;
+    ontuBasis = 'biz';
+  } else if (firstHome){
+    ontuLTVRate = 0.70;
+    ontuLTVCap = 60000;
+    ontuBasis = 'household';
+  } else if (region === 'regulated'){
+    ontuLTVRate = 0.40;
+    ontuLTVCap = regionPriceCap(collateral);
+    ontuBasis = 'household';
+  } else {
+    ontuLTVRate = 0.70;
+    ontuLTVCap = Infinity;
+    ontuBasis = 'household';
+  }
+  const ontuAmount = Math.max(Math.min(collateral * ontuLTVRate, ontuLTVCap) - existingLien, 0);
   const ontuRateLow = 11.8;
   const ontuRateHigh = 12.8;
 
@@ -447,27 +474,30 @@ function calculate(){
     ontuLTVRate, bankLTVRate, capLTVRate,
     bankStressRate, capStressRate,
     bankRate, capRate,
-    ontuRateLow, ontuRateHigh
+    ontuRateLow, ontuRateHigh, ontuBasis
   });
 }
 
 const purposeNotes = {
   biz: "사업자금 목적은 은행권 사업자대출 한도가 부족한 경우가 많습니다. 온투업은 담보가치 중심으로 심사하여 부족분을 보완할 수 있는지 확인해볼 수 있습니다.",
-  jeonse: "전세보증금 반환 시점까지의 일시적 자금 공백은 상환계획(신규 세입자 입주 시점 등)이 명확할 경우 브릿지 성격으로 검토됩니다.",
+  jeonse: "보증금반환 시점까지의 일시적 자금 공백은 상환계획(신규 세입자 입주 시점 등)이 명확할 경우 브릿지 성격으로 검토됩니다.",
   junior: "이미 선순위 담보대출이 있는 경우, 은행권에서는 추가 대출이 구조적으로 제한될 수 있습니다. 온투업은 후순위 담보대출도 취급 가능한지 확인이 필요합니다.",
   villa: "빌라·다세대는 은행권에서 시세를 보수적으로 산정해 한도가 낮게 나오는 경우가 많습니다. 감정 기준 차이를 확인해보시길 권합니다.",
-  gap: "매매 잔금 부족분을 전세 세팅 후 상환하는 구조라면, 상환 시점과 규모가 명확할수록 브릿지 자금 실행 가능성 검토가 수월합니다.",
-  move: "기존 주택 처분·전세 반환 시점에 맞춘 단기 자금 수요는 처분조건부 대출 대비 실행 속도가 중요한 변수입니다."
+  gap: "매매 잔금 부족분을 전세 세팅 후 상환하는 구조라면, 상환 시점과 규모가 명확할수록 브릿지 자금 실행 가능성 검토가 수월합니다."
 };
 
 function render(d){
   const maxVal = Math.max(d.ontu, d.bank, d.cap, 1);
 
+  const ontuBasisText = d.ontuBasis === 'biz'
+    ? `사업자금 목적으로, 온투업 자체 기준(최대 ${(d.ontuLTVRate*100).toFixed(0)}%)이 적용되어 가계대출 대비 완화된 담보인정비율로 검토됩니다.`
+    : `2026년 4월부터 온투업 가계 목적 주택담보대출에도 은행과 동일한 LTV 규제(${(d.ontuLTVRate*100).toFixed(0)}%)와 주택가격별 한도가 적용됩니다.`;
+
   const cardsBase = [
     {
       key:'ontu', name:'온투업(P2P 부동산담보) · 에이스펀딩',
       amount: d.ontu, rate: d.ontuRateLow,
-      sub: `아파트 시세의 최대 ${(d.ontuLTVRate*100).toFixed(0)}% 수준까지 검토 가능(규제·비규제지역 및 개별 심사 결과에 따라 상이) · 만기일시상환 방식 · 후순위 채권 반영 · 법정 DSR 규제 미적용(자체 상환능력 심사 진행)`,
+      sub: `${ontuBasisText} 만기일시상환 방식 · 후순위 채권 반영 · 법정 DSR 규제 미적용(자체 상환능력 심사 진행)`,
       detail: [
         ['적용 기준','담보가치 중심'],
         ['적용 금리','연 ' + d.ontuRateLow + '%~' + d.ontuRateHigh + '%'],
@@ -557,7 +587,7 @@ function render(d){
           ${c.detail.map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('')}
         </div>
         ${isRecommended ? `<div class="persona-note">${recommendReason}</div>` : ''}
-        ${c.isOntu ? `<div class="hint" style="margin-top:10px;">* 연 ${d.ontuRateLow}%~${d.ontuRateHigh}% 수준은 신용점수, 세금 납부 특이사항 없음, 소득 요건 등 심사 기준을 충족하는 경우의 참고 금리이며, 플랫폼 비용은 별도로 발생합니다.</div>` : ''}
+        ${c.isOntu ? `<div class="hint" style="margin-top:10px;">* 연 ${d.ontuRateLow}%~${d.ontuRateHigh}%는 신용점수, 세금 납부 특이사항 없음, 소득 요건 등 심사 기준을 충족하는 경우의 참고 금리이며, 플랫폼 비용은 별도로 발생합니다.</div>` : ''}
         ${c.isOntu && purposeNotes[d.purpose] ? `<div class="persona-note">${purposeNotes[d.purpose]}</div>` : ''}
       </div>
     `;
