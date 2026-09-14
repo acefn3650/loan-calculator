@@ -280,9 +280,9 @@
         <div class="row"><input type="number" id="pf-savingsfee" value="2" step="0.1"><span class="unit">%</span></div>
       </div>
       <div class="field" style="margin-bottom:0;">
-        <label for="pf-platformfee">에이스펀딩 플랫폼 비용(1회성)</label>
-        <div class="row"><input type="number" id="pf-platformfee" value="1.0" step="0.1"><span class="unit">%</span></div>
-        <div class="hint">실제 수수료율은 상담 시 확인이 필요한 <span class="placeholder-flag">예시 가정값</span>입니다.</div>
+        <label for="pf-acefee">에이스펀딩 중도상환수수료율</label>
+        <div class="row"><input type="number" id="pf-acefee" value="0" step="0.1"><span class="unit">%</span></div>
+        <div class="hint">중도상환수수료 면제 정책에 따라 기본값 0%입니다.</div>
       </div>
     </div>
 
@@ -315,7 +315,7 @@
     본 계산기는 2026년 9월 기준 공개된 정부 대출 규제(스트레스 DSR 3단계, LTV·지역별 한도 등)를 바탕으로 한 <strong>대략적인 참고용 추정치</strong>이며, 실제 대출 가능 여부·한도·금리는 금융기관별 심사 기준, 신용상태, 담보 평가 결과에 따라 달라질 수 있습니다. 본 계산 결과는 대출 승인을 보장하지 않습니다.<br><br>
     계산 편의를 위해 기존 대출의 상환 부담은 <strong>연간 이자 납입액</strong> 기준으로만 반영했습니다. 실제 금융기관의 DSR 산정 방식은 대출 종류(분할상환·만기일시상환 등)에 따라 원금까지 포함되거나 별도 환산 기준이 적용될 수 있어, 실제 한도와 차이가 있을 수 있습니다.<br><br>
     상환 능력을 초과하는 대출은 개인신용평점 하락의 원인이 될 수 있으며, 채무를 상환하지 못할 경우 담보로 제공한 부동산이 처분될 수 있습니다. 대출 실행 전 계약 조건을 반드시 확인하시기 바랍니다.<br><br>
-    에이스펀딩은 온라인투자연계금융업법에 따라 등록된 온투업체입니다. (등록번호: 2022-54 · 금융위원회)
+    에이스펀딩은 온라인투자연계금융업법에 따라 등록된 온투업체입니다. (등록번호: 제2022-54호 · 등록 금융위원회)
   </div>
 
   <div class="cta">
@@ -604,19 +604,19 @@ function calcPrepayment(){
   const months = parseFloat($('pf-months').value) || 0;
   const bankFeeRate = (parseFloat($('pf-bankfee').value) || 0) / 100;
   const savingsFeeRate = (parseFloat($('pf-savingsfee').value) || 0) / 100;
-  const platformFeeRate = (parseFloat($('pf-platformfee').value) || 0) / 100;
+  const aceFeeRate = (parseFloat($('pf-acefee').value) || 0) / 100;
 
   const vestingMonths = 36; // 가정: 3년에 걸쳐 중도상환수수료가 선형으로 감소
   const remainingFeeRatio = Math.max(0, 1 - (months / vestingMonths));
 
   const bankFeeCost = principal * bankFeeRate * remainingFeeRatio;
   const savingsFeeCost = principal * savingsFeeRate * remainingFeeRatio;
-  const platformFeeCost = principal * platformFeeRate; // 1회성, 시점과 무관
+  const aceFeeCost = principal * aceFeeRate * remainingFeeRatio;
 
   const options = [
     { name:'1금융권(은행)', cost: bankFeeCost },
     { name:'2금융권(저축은행 등)', cost: savingsFeeCost },
-    { name:'에이스펀딩', cost: platformFeeCost }
+    { name:'에이스펀딩', cost: aceFeeCost }
   ];
   const cheapest = options.reduce((a,b)=> a.cost <= b.cost ? a : b);
   const mostExpensive = options.reduce((a,b)=> a.cost >= b.cost ? a : b);
@@ -632,13 +632,16 @@ function calcPrepayment(){
   // 에이스펀딩 기준 손익분기 개월 수 계산 (은행/2금융권 각각)
   function breakevenMsg(feeRate, label){
     if (feeRate <= 0) return '';
-    const m = 36 * (1 - platformFeeRate/feeRate);
+    if (aceFeeRate <= 0){
+      return `${label} 대비: 에이스펀딩은 중도상환수수료가 면제(0%)이므로, 상환 시점과 무관하게 항상 같거나 더 유리합니다.`;
+    }
+    const m = 36 * (1 - aceFeeRate/feeRate);
     if (m > 0 && m < vestingMonths){
       return `${label} 대비: 약 <b>${Math.round(m)}개월 이내</b> 상환 시 에이스펀딩이 유리해집니다.`;
     } else if (m >= vestingMonths){
       return `${label} 대비: 현재 가정값 기준으로는 상환 시점과 무관하게 에이스펀딩 쪽 부담이 낮게 계산됩니다.`;
     } else {
-      return `${label} 대비: 현재 가정값 기준으로는 ${label}의 수수료가 더 낮게 계산됩니다. 플랫폼 비용 가정치를 조정해보세요.`;
+      return `${label} 대비: 현재 가정값 기준으로는 ${label}의 수수료가 더 낮게 계산됩니다. 에이스펀딩 수수료율 가정치를 조정해보세요.`;
     }
   }
 
@@ -646,7 +649,7 @@ function calcPrepayment(){
     <div class="detail-grid" style="grid-template-columns:repeat(3,1fr);border-top:none;padding-top:0;margin-bottom:14px;">
       <div><span>1금융권 예상 중도상환수수료</span><b>${formatManwon(bankFeeCost)}</b></div>
       <div><span>2금융권 예상 중도상환수수료</span><b>${formatManwon(savingsFeeCost)}</b></div>
-      <div><span>에이스펀딩 플랫폼 비용(가정)</span><b>${formatManwon(platformFeeCost)}</b></div>
+      <div><span>에이스펀딩 예상 중도상환수수료</span><b>${formatManwon(aceFeeCost)}</b></div>
     </div>
     <div class="persona-note" style="margin-top:0;">
       ${verdict}<br>
@@ -656,7 +659,7 @@ function calcPrepayment(){
   `;
 }
 
-['pf-principal','pf-months','pf-bankfee','pf-savingsfee','pf-platformfee'].forEach(id=>{
+['pf-principal','pf-months','pf-bankfee','pf-savingsfee','pf-acefee'].forEach(id=>{
   document.getElementById(id).addEventListener('input', calcPrepayment);
 });
 calcPrepayment();
